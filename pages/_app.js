@@ -1,11 +1,19 @@
-import {Fragment} from "react";
+import {Fragment, useEffect} from "react";
 import Head from "next/head";
 import {observer} from "mobx-react-lite";
 import {Toaster} from "react-hot-toast";
 
 import "../assets/scss/styles.scss";
 
+import orderStore from "stores/ordersStore"
+import wishListStore from "stores/wishListStore"
+
 export default observer(({ Component, pageProps }) => {
+    useEffect(() => {
+      orderStore.getCart().then(async () => {
+          await wishListStore.getWishList()
+      })
+    }, [])
     return (
         <Fragment>
             <Head>
@@ -18,7 +26,7 @@ export default observer(({ Component, pageProps }) => {
             </Head>
             <Component {...pageProps} />
             <Toaster
-                position="top-right"
+                position="bottom-right"
                 reverseOrder={false}
             />
         </Fragment>

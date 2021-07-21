@@ -1,7 +1,5 @@
 import {makeAutoObservable, runInAction} from "mobx";
-import { wishListService } from 'API'
-import { productAddToWishList, productRemoveFromWishList, productGet } from 'utilities/responseStatus'
-import { toastWishListIsProduct} from 'utilities/toastify'
+import {toastProductAddToWishList, toastProductRemoveFromWishList} from 'utilities/toastify'
 
 class WishList{
     wishList = [];
@@ -13,9 +11,12 @@ class WishList{
     }
 
     async getWishList(){
-        const response = await wishListService.getWishList()
-        console.log(response)
-        this.setWishList(response.data)
+        // const response = await wishListService.getWishList()
+        // console.log(response)
+        // this.setWishList(response.data)
+        if(JSON.parse(await localStorage.getItem('wishList')) !== null){
+            this.setWishList(JSON.parse(await localStorage.getItem('wishList')))
+        }
     }
 
     async acceptWishList(product){
@@ -32,15 +33,36 @@ class WishList{
         //     if (response.status === 200)
         //         await this.getWishList()
         // }
-        this.wishList.push(product)
+        const index = this.wishList.findIndex(productItem => productItem.product.id === product.id);
+        if (index === -1) {
+            runInAction(() => {
+                this.wishList.push({product: product, quantity: 1})
+            })
+        } else {
+            runInAction(() => {
+                this.wishList[index].quantity++
+            })
+        }
+        localStorage.setItem("wishList", JSON.stringify(this.wishList))
+        toastProductAddToWishList(product.name)
     }
 
     async deleteWishList(product){
-        const response = await wishListService.deleteWishList(product.id)
-        console.log(response)
-        productRemoveFromWishList(response.status, product.title)
-        if(response.status === 200)
-            await this.getWishList()
+        // const response = await wishListService.deleteWishList(product.id)
+        // console.log(response)
+        // productRemoveFromWishList(response.status, product.title)
+        // if(response.status === 200)
+        //     await this.getWishList()
+        runInAction(() => {
+            this.wishList = this.wishList.filter(productItem => productItem.product !== product)
+        })
+        if (this.wishList.length <= 0) {
+            localStorage.removeItem("wishList")
+        } else {
+            localStorage.removeItem("wishList")
+            localStorage.setItem("wishList", JSON.stringify(this.wishList))
+        }
+        toastProductRemoveFromWishList(product.name)
     }
 
     // @ts-ignore

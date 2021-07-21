@@ -16,8 +16,8 @@ import CartOverlay from "./elements/CartOverlay";
 import WishlistOverlay from "./elements/WishlistOverlay";
 import MobileMenu from "./elements/MobileMenu";
 
-import wishListStore from "../../stores/wishListStore"
-import ordersStore from "../../stores/ordersStore"
+import wishListStore from "stores/wishListStore"
+import ordersStore from "stores/ordersStore"
 
 const HeaderOne = observer(({ aboutOverlay, cartItems }) => {
   const [scroll, setScroll] = useState(0);

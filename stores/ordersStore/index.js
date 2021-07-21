@@ -23,6 +23,12 @@ class OrdersStore{
         this.setOrders(response.data)
     }
 
+    async getCart(){
+        if(JSON.parse(await localStorage.getItem('cart')) !== null){
+            this.setCart(JSON.parse(await localStorage.getItem('cart')))
+        }
+    }
+
     async acceptOrder(){
         this.cart.map(async item => {
             console.log(item)
@@ -52,7 +58,6 @@ class OrdersStore{
     }
 
     addCart(product){
-        console.log(product)
         const index = this.cart.findIndex(productItem => productItem.product.id === product.id);
         if (index === -1) {
             runInAction(() => {
@@ -63,9 +68,8 @@ class OrdersStore{
                 this.cart[index].quantity++
             })
         }
-        console.log(this.cart)
         localStorage.setItem("cart", JSON.stringify(this.cart))
-        toastProductAddToCart(product.title)
+        toastProductAddToCart(product.name)
     }
 
     increaseQuantity(product){
@@ -152,14 +156,6 @@ class OrdersStore{
             amount += productItem.product.price * productItem.quantity;
         })
         return amount
-    }
-
-    get getOrderTable(){
-        return this.orders;
-    }
-
-    get getCart(){
-        return this.cart;
     }
 }
 

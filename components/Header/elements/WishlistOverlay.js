@@ -37,17 +37,17 @@ const WishlistOverlay = observer(({
             <div className="wishlist-product-wrapper">
               <div className="wishlist-product-container">
                 <CustomScroll allowOuterScroll={true}>
-                  {wishListStore.map((product, i) => {
+                  {wishListStore.wishList.map((item, i) => {
                     const discountedPrice = getDiscountPrice(
-                      product.price,
-                      product.discount
-                    ).toFixed(2);
+                        item.product.price,
+                        item.product.discount
+                    )
                     return (
                       <div className="single-wishlist-product" key={i}>
                         <span className="wishlist-close-icon">
                           <button
                             onClick={() =>
-                                wishListStore.deleteWishList(product)
+                                wishListStore.deleteWishList(item.product)
                             }
                           >
                             <IoIosClose />
@@ -55,13 +55,13 @@ const WishlistOverlay = observer(({
                         </span>
                         <div className="image">
                           <Link
-                            href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                            as={`${process.env.PUBLIC_URL}/shop/product-basic/${product.slug}`}
+                            href={`/shop/product-basic/[slug]?slug=${item.product.slug}`}
+                            as={`${process.env.PUBLIC_URL}/shop/product-basic/${item.product.slug}`}
                           >
                             <a>
                               <img
                                 src={
-                                  process.env.PUBLIC_URL + product.thumbImage[0]
+                                  process.env.PUBLIC_URL + item.product.thumbImage[0]
                                 }
                                 className="img-fluid"
                                 alt=""
@@ -72,10 +72,10 @@ const WishlistOverlay = observer(({
                         <div className="content">
                           <h5>
                             <Link
-                              href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                              as={`${process.env.PUBLIC_URL}/shop/product-basic/${product.slug}`}
+                              href={`/shop/product-basic/[slug]?slug=${item.product.slug}`}
+                              as={`${process.env.PUBLIC_URL}/shop/product-basic/${item.product.slug}`}
                             >
-                              <a>{product.name}</a>
+                              <a>{item.product.name}</a>
                             </Link>
                           </h5>
                           <p>

@@ -38,32 +38,31 @@ const CartOverlay = observer(({
             <div className="cart-product-wrapper">
               <div className="cart-product-container">
                 <CustomScroll allowOuterScroll={true}>
-                  {ordersStore.cart.map((product, i) => {
+                  {ordersStore.cart.map((item, i) => {
                     const discountedPrice = getDiscountPrice(
-                      product.price,
-                      product.discount
-                    ).toFixed(2);
+                        item.product.price,
+                        item.product.discount)
 
-                    cartTotalPrice += discountedPrice * product.quantity;
+                    cartTotalPrice += discountedPrice * item.quantity;
 
                     return (
                       <div className="single-cart-product" key={i}>
                         <span className="cart-close-icon">
                           <button
-                            onClick={() => ordersStore.decreaseQuantity(product)}
+                            onClick={() => ordersStore.decreaseQuantity(item.product)}
                           >
                             <IoIosClose />
                           </button>
                         </span>
                         <div className="image">
                           <Link
-                            href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                            as={`${process.env.PUBLIC_URL}/shop/product-basic/${product.slug}`}
+                            href={`/shop/product-basic/[slug]?slug=${item.product.slug}`}
+                            as={`${process.env.PUBLIC_URL}/shop/product-basic/${item.product.slug}`}
                           >
                             <a>
                               <img
                                 src={
-                                  process.env.PUBLIC_URL + product.thumbImage[0]
+                                  process.env.PUBLIC_URL + item.product.thumbImage[0]
                                 }
                                 className="img-fluid"
                                 alt=""
@@ -74,24 +73,24 @@ const CartOverlay = observer(({
                         <div className="content">
                           <h5>
                             <Link
-                              href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                              as={`${process.env.PUBLIC_URL}/shop/product-basic/${product.slug}`}
+                              href={`/shop/product-basic/[slug]?slug=${item.product.slug}`}
+                              as={`${process.env.PUBLIC_URL}/shop/product-basic/${item.product.slug}`}
                             >
-                              <a>{product.name}</a>
+                              <a>{item.product.name}</a>
                             </Link>
                           </h5>
-                          {product.selectedProductColor &&
-                          product.selectedProductSize ? (
+                          {item.product.selectedProductColor &&
+                          item.product.selectedProductSize ? (
                             <div className="cart-item-variation">
-                              <span>Color: {product.selectedProductColor}</span>
-                              <span>Size: {product.selectedProductSize}</span>
+                              <span>Color: {item.product.selectedProductColor}</span>
+                              <span>Size: {item.product.selectedProductSize}</span>
                             </div>
                           ) : (
                             ""
                           )}
                           <p>
                             <span className="cart-count">
-                              {product.quantity} x{" "}
+                              {item.quantity} x{" "}
                             </span>{" "}
                             <span className="discounted-price">
                               ${discountedPrice}
